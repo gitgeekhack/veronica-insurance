@@ -87,6 +87,61 @@
         ]
       },
       "parameters": []
+    },
+    "/vehicle-record": {
+      "post": {
+        "summary": "",
+        "operationId": "post-vehicle-record",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/crm-receipt": {
+      "post": {
+        "summary": "",
+        "operationId": "post-crm-receipt",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/batch": {
+      "post": {
+        "summary": "",
+        "operationId": "post-batch",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/itc": {
+      "post": {
+        "summary": "",
+        "operationId": "post-itc",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/alliance-application": {
+      "post": {
+        "summary": "",
+        "operationId": "post-alliance-application",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
