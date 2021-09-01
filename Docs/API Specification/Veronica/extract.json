@@ -1,0 +1,106 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Driving License",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.veronica.com/api/extract/v1"
+    }
+  ],
+  "paths": {
+    "/driving-license": {
+      "post": {
+        "summary": "asdas",
+        "operationId": "post-driving-license",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string"
+                    },
+                    "address": {
+                      "type": "string"
+                    },
+                    "date_of_birth": {
+                      "type": "string"
+                    },
+                    "has_signature": {
+                      "type": "boolean"
+                    },
+                    "exp_date": {
+                      "type": "string"
+                    },
+                    "license_number": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "description": "",
+                "type": "object",
+                "properties": {
+                  "document_url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "document_url"
+                ],
+                "x-examples": {
+                  "example-1": {
+                    "document_url": ""
+                  }
+                }
+              },
+              "examples": {}
+            }
+          }
+        },
+        "x-internal": false,
+        "security": [
+          {
+            "bearer_token": []
+          }
+        ]
+      },
+      "parameters": []
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "bearer_token": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
+  "security": [
+    {
+      "examplekey": []
+    }
+  ]
+}
