@@ -22,23 +22,31 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "name": {
-                      "type": "string"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "date_of_birth": {
+                          "type": "string"
+                        },
+                        "has_signature": {
+                          "type": "boolean"
+                        },
+                        "exp_date": {
+                          "type": "string"
+                        },
+                        "license_number": {
+                          "type": "string"
+                        }
+                      }
                     },
-                    "address": {
-                      "type": "string"
-                    },
-                    "date_of_birth": {
-                      "type": "string"
-                    },
-                    "has_signature": {
+                    "success": {
                       "type": "boolean"
-                    },
-                    "exp_date": {
-                      "type": "string"
-                    },
-                    "license_number": {
-                      "type": "string"
                     }
                   }
                 }
@@ -94,7 +102,64 @@
         "operationId": "post-vehicle-record",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "vin": {
+                          "type": "string"
+                        },
+                        "model_year": {
+                          "type": "integer"
+                        },
+                        "registered_owner_name": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "sucsess": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearer_token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "document_url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "document_url"
+                ]
+              }
+            }
           }
         }
       }
@@ -105,7 +170,88 @@
         "operationId": "post-crm-receipt",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "insured_name": {
+                          "type": "string"
+                        },
+                        "insured_address": {
+                          "type": "string"
+                        },
+                        "nb_eft_to_company": {
+                          "type": "string"
+                        },
+                        "payment_date": {
+                          "type": "string"
+                        },
+                        "line_of_bussiness": {
+                          "type": "string"
+                        },
+                        "policy_number": {
+                          "type": "string"
+                        },
+                        "driving_record": {
+                          "type": "string"
+                        },
+                        "processing_fee": {
+                          "type": "string"
+                        },
+                        "bf": {
+                          "type": "string"
+                        },
+                        "vr": {
+                          "type": "string"
+                        },
+                        "payment_notes": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "sucsses": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearer_token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "document_url": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "document_url"
+                ]
+              }
+            }
           }
         }
       }
@@ -116,7 +262,64 @@
         "operationId": "post-batch",
         "responses": {
           "200": {
-            "description": "OK"
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "card": {
+                          "type": "integer"
+                        },
+                        "sale_amount": {
+                          "type": "number"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "has_signature": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "sucsess": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearer_token": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "document_url": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
           }
         }
       }
