@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "https://www.veronicainsurance.com/api/extract"
+      "url": "https://www.veronicainsurance.com/api/driving-license"
     }
   ],
   "paths": {
-    "/v1/driving-license": {
+    "/v1/extract": {
       "post": {
         "summary": "Extract Driving License Data points",
         "operationId": "post-driving-license",
@@ -66,8 +66,8 @@
                         "driving_license": {
                           "name": "John Doe",
                           "address": "15th street, NYC",
-                          "date_of_birth": "1987-04-28T00:00:00.000Z",
-                          "exp_date": "2029-04-28T00:00:00.000Z",
+                          "date_of_birth": "1987-04-28",
+                          "exp_date": "2029-04-28",
                           "license_number": "D4636307"
                         }
                       },
@@ -80,8 +80,8 @@
                         "driving_license": {
                           "name": null,
                           "address": "15th street, NYC",
-                          "date_of_birth": "1987-04-28T00:00:00.000Z",
-                          "exp_date": "2029-04-28T00:00:00.000Z",
+                          "date_of_birth": "1987-04-28",
+                          "exp_date": "2029-04-28",
                           "license_number": null
                         }
                       },
@@ -115,7 +115,14 @@
                     }
                   }
                 },
-                "examples": {}
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "invalid_document",
+                      "message": "Input document is invalid"
+                    }
+                  }
+                }
               }
             }
           },
