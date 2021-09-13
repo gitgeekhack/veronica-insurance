@@ -1,18 +1,19 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "CRM Receipt",
-    "version": "1.0"
+    "title": "Extract CRM Receipt Data Points API",
+    "version": "1.0",
+    "description": ""
   },
   "servers": [
     {
-      "url": "https://api.veronica.com/api/extract/v1"
+      "url": "https://www.veronicainsurance.com/api/crm-receipt"
     }
   ],
   "paths": {
-    "/crm-receipt": {
+    "/v1/extract": {
       "post": {
-        "summary": "",
+        "summary": "Extract CRM Receipt Data points",
         "operationId": "post-crm-receipt",
         "responses": {
           "200": {
@@ -25,43 +26,82 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "insured_name": {
-                          "type": "string"
-                        },
-                        "insured_address": {
-                          "type": "string"
-                        },
-                        "nb_eft_to_company": {
-                          "type": "string"
-                        },
-                        "payment_date": {
-                          "type": "string"
-                        },
-                        "line_of_bussiness": {
-                          "type": "string"
-                        },
-                        "policy_number": {
-                          "type": "string"
-                        },
-                        "driving_record": {
-                          "type": "string"
-                        },
-                        "processing_fee": {
-                          "type": "string"
-                        },
-                        "bf": {
-                          "type": "string"
-                        },
-                        "vr": {
-                          "type": "string"
-                        },
-                        "payment_notes": {
-                          "type": "string"
+                        "crm_receipt ": {
+                          "type": "object",
+                          "properties": {
+                            "policy_number": {
+                              "type": "string",
+                              "description": "The extracted policy number from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "name": {
+                              "type": "string",
+                              "description": "The extracted name from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "address": {
+                              "type": "string",
+                              "description": "The extracted address from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "line_of_bussiness": {
+                              "type": "string",
+                              "description": "The extracted line of bussiness from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "payment_date": {
+                              "type": "string",
+                              "description": "The extracted payment date from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "payment_notes": {
+                              "type": "string",
+                              "description": "The extracted payment note from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "amount_paid": {
+                              "type": "number",
+                              "description": "The extracted amount paid from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "amount_left_to_pay": {
+                              "type": "number",
+                              "description": "The extracted amount left to paid from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "nb_eft_to_company_amount": {
+                              "type": "number",
+                              "description": "The extracted NB EFT to Company from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "vr_fee_amount": {
+                              "type": "number",
+                              "description": "The extracted VR fee from the CRM Receipt. If unable to extract value will be null."
+                            },
+                            "broker_fee_amount": {
+                              "type": "number",
+                              "description": "Derived Broker fee based on the extracted Total Amount Due and NB EFT to Company. If unable to derive value will be null."
+                            }
+                          }
                         }
                       }
                     },
-                    "sucsses": {
-                      "type": "boolean"
+                    "success": {
+                      "type": "boolean",
+                      "description": "Indecates if the API was able to sucessfully extract data points. If unable to extract any data point the value will be false."
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "data": {
+                        "crm_receipt ": {
+                          "policy_number": "MIL4969400",
+                          "name": "Zuniga Benitez Alex",
+                          "address": "4515 Cypress Ave Apt A El Monte, CA, 91731-1492",
+                          "line_of_bussiness": "Personal Auto",
+                          "payment_date": "2021-07-08",
+                          "payment_notes": "7551",
+                          "amount_paid": 287.46,
+                          "amount_left_to_pay": 0,
+                          "nb_eft_to_company": 137.46,
+                          "vr_fee": null,
+                          "broker_fee": 150
+                        }
+                      },
+                      "success": true
                     }
                   }
                 }
@@ -69,39 +109,117 @@
             }
           },
           "400": {
-            "description": "Bad Request"
+            "description": "Bad Request\n\n|code                  |message                         |\n|------                |---------                       |\n|invalid_document      | Input document is invalid      |\n|missing_document      | Missing required input document|",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "invalid_document",
+                      "message": "Input document is invalid"
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
-            "description": "Unauthorized"
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "message": "Unauthorized"
+                    }
+                  }
+                }
+              }
+            }
           },
           "500": {
-            "description": "Internal Server Error"
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "message": "Internal server error"
+                    }
+                  }
+                }
+              }
+            }
           }
         },
-        "security": [
-          {
-            "bearer_token": []
-          }
-        ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
+                "description": "",
                 "type": "object",
+                "x-examples": {
+                  "example-1": {
+                    "document_url": ""
+                  }
+                },
                 "properties": {
                   "document_url": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "The input document URL of the CRM Receipt for which data points need to be extracted."
                   }
                 },
                 "required": [
                   "document_url"
                 ]
+              },
+              "examples": {
+                "example-1": {
+                  "value": {
+                    "document_url": "string"
+                  }
+                }
               }
             }
-          }
+          },
+          "description": ""
         },
-        "description": ""
-      }
+        "x-internal": false,
+        "security": [
+          {
+            "bearer_token": []
+          }
+        ],
+        "description": "This API extracts and retuns the data points from the CRM receipt."
+      },
+      "parameters": []
     }
   },
   "components": {
