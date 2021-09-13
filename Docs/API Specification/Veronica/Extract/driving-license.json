@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "https://www.veronicainsurance.com/api/extract"
+      "url": "https://www.veronicainsurance.com/api/driving-license"
     }
   ],
   "paths": {
-    "/v1/driving-license": {
+    "/v1/extract": {
       "post": {
         "summary": "Extract Driving License Data points",
         "operationId": "post-driving-license",
@@ -52,10 +52,6 @@
                           }
                         }
                       }
-                    },
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indecates if the API was able to sucessfully extract data points. If unable to extract any data point the value will be false."
                     }
                   }
                 },
@@ -66,12 +62,11 @@
                         "driving_license": {
                           "name": "John Doe",
                           "address": "15th street, NYC",
-                          "date_of_birth": "1987-04-28T00:00:00.000Z",
-                          "exp_date": "2029-04-28T00:00:00.000Z",
+                          "date_of_birth": "1987-04-28",
+                          "exp_date": "2029-04-28",
                           "license_number": "D4636307"
                         }
-                      },
-                      "success": true
+                      }
                     }
                   },
                   "example-2": {
@@ -80,20 +75,18 @@
                         "driving_license": {
                           "name": null,
                           "address": "15th street, NYC",
-                          "date_of_birth": "1987-04-28T00:00:00.000Z",
-                          "exp_date": "2029-04-28T00:00:00.000Z",
+                          "date_of_birth": "1987-04-28",
+                          "exp_date": "2029-04-28",
                           "license_number": null
                         }
-                      },
-                      "success": true
+                      }
                     }
                   },
                   "example-3": {
                     "value": {
                       "data": {
-                        "driving_license": {}
-                      },
-                      "success": false
+                        "driving_license": null
+                      }
                     }
                   }
                 }
@@ -101,7 +94,7 @@
             }
           },
           "400": {
-            "description": "Bad Request\n\n|code                  |message                         |\n|------                |---------                       |\n|invalid_document      | Input document is invalid      |\n|missing_document      | Missing required input document|",
+            "description": "Bad Request\n\n|code                      |message                         |\n|------                    |---------                       |\n|invalid_document          | Input document is invalid      |\n|missing_document          | Missing required input document|\n|invalid_document_url      | Input document URL is invalid  |",
             "content": {
               "application/json": {
                 "schema": {
@@ -115,7 +108,14 @@
                     }
                   }
                 },
-                "examples": {}
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "code": "invalid_document",
+                      "message": "Input document is invalid"
+                    }
+                  }
+                }
               }
             }
           },
