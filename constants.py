@@ -1,6 +1,6 @@
 class path:
     tess_path = r"C:/Program Files/Tesseract-OCR/tesseract.exe"
-    target = "results/crops"
+    target = "results"
     yolo_path = "ultralytics/yolov5"
-    model_path = 'model/DLyolov5l.pt'
+    model_path = 'model/bestnewdata.pt'
     save_folder = "results"
