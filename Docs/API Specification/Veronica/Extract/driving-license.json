@@ -52,10 +52,6 @@
                           }
                         }
                       }
-                    },
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indecates if the API was able to sucessfully extract data points. If unable to extract any data point the value will be false."
                     }
                   }
                 },
@@ -70,8 +66,7 @@
                           "exp_date": "2029-04-28",
                           "license_number": "D4636307"
                         }
-                      },
-                      "success": true
+                      }
                     }
                   },
                   "example-2": {
@@ -84,16 +79,14 @@
                           "exp_date": "2029-04-28",
                           "license_number": null
                         }
-                      },
-                      "success": true
+                      }
                     }
                   },
                   "example-3": {
                     "value": {
                       "data": {
-                        "driving_license": {}
-                      },
-                      "success": false
+                        "driving_license": null
+                      }
                     }
                   }
                 }
@@ -101,7 +94,7 @@
             }
           },
           "400": {
-            "description": "Bad Request\n\n|code                  |message                         |\n|------                |---------                       |\n|invalid_document      | Input document is invalid      |\n|missing_document      | Missing required input document|",
+            "description": "Bad Request\n\n|code                      |message                         |\n|------                    |---------                       |\n|invalid_document          | Input document is invalid      |\n|missing_document          | Missing required input document|\n|invalid_document_url      | Input document URL is invalid  |",
             "content": {
               "application/json": {
                 "schema": {

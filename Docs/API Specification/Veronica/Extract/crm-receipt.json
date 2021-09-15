@@ -41,17 +41,13 @@
                               "type": "string",
                               "description": "The extracted address from the CRM Receipt. If unable to extract value will be null."
                             },
-                            "line_of_bussiness": {
+                            "line_of_business": {
                               "type": "string",
                               "description": "The extracted line of bussiness from the CRM Receipt. If unable to extract value will be null."
                             },
                             "payment_date": {
                               "type": "string",
                               "description": "The extracted payment date from the CRM Receipt. If unable to extract value will be null."
-                            },
-                            "payment_notes": {
-                              "type": "string",
-                              "description": "The extracted payment note from the CRM Receipt. If unable to extract value will be null."
                             },
                             "amount_paid": {
                               "type": "number",
@@ -72,14 +68,24 @@
                             "broker_fee_amount": {
                               "type": "number",
                               "description": "Derived Broker fee based on the extracted Total Amount Due and NB EFT to Company. If unable to derive value will be null."
+                            },
+                            "payment_notes": {
+                              "type": "object",
+                              "description": "The extracted payment note from the CRM Receipt. If unable to extract value will be null.",
+                              "properties": {
+                                "card_last_4_digit": {
+                                  "type": "integer",
+                                  "description": "The extracted last 4 digit of the card from the CRM Receipt. If unable to extract value will be null."
+                                },
+                                "notes": {
+                                  "type": "string",
+                                  "description": "The extracted payment note from the CRM Receipt. If unable to extract value will be null."
+                                }
+                              }
                             }
                           }
                         }
                       }
-                    },
-                    "success": {
-                      "type": "boolean",
-                      "description": "Indecates if the API was able to sucessfully extract data points. If unable to extract any data point the value will be false."
                     }
                   }
                 },
@@ -87,21 +93,23 @@
                   "example-1": {
                     "value": {
                       "data": {
-                        "crm_receipt ": {
-                          "policy_number": "MIL4969400",
-                          "name": "Zuniga Benitez Alex",
-                          "address": "4515 Cypress Ave Apt A El Monte, CA, 91731-1492",
-                          "line_of_bussiness": "Personal Auto",
-                          "payment_date": "2021-07-08",
-                          "payment_notes": "7551",
-                          "amount_paid": 287.46,
+                        "crm_receipt": {
+                          "payment_date": "August 19, 2021",
+                          "name": "Gaspard, Christopher Paull Ii",
+                          "address": "26723 BRUCE ST HIGHLAND, CA, 92346",
+                          "policy_number": "MIL4994787",
+                          "line_of_business": "Personal Auto",
+                          "vr_fee_amount": 10,
+                          "nb_eft_to_company_amount": 171.19,
+                          "amount_paid": 495,
+                          "broker_fee_amount": 323.81,
                           "amount_left_to_pay": 0,
-                          "nb_eft_to_company": 137.46,
-                          "vr_fee": null,
-                          "broker_fee": 150
+                          "payment_notes": {
+                            "card_last_4_digit": 5640,
+                            "notes": "NB"
+                          }
                         }
-                      },
-                      "success": true
+                      }
                     }
                   }
                 }
@@ -109,7 +117,7 @@
             }
           },
           "400": {
-            "description": "Bad Request\n\n|code                  |message                         |\n|------                |---------                       |\n|invalid_document      | Input document is invalid      |\n|missing_document      | Missing required input document|",
+            "description": "Bad Request\n\n|code                      |message                         |\n|------                    |---------                       |\n|invalid_document          | Input document is invalid      |\n|missing_document          | Missing required input document|\n|invalid_document_url      | Input document URL is invalid  |",
             "content": {
               "application/json": {
                 "schema": {
