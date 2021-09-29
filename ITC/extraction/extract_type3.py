@@ -10,7 +10,7 @@ Aname = 5
 class ITC_Type3:
     def check_blocks(self,blocks, list):
         dict = {}
-        for i in range(0, 30):
+        for i in range(0, 50):
             if blocks[i]['lines'][0]['spans'][0]['text'] in list:
                 dict[blocks[i]['lines'][0]['spans'][0]['text']] = i
         return dict
