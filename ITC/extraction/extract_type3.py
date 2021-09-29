@@ -16,7 +16,7 @@ class ITC_Type3:
         return dict
 
 
-    def get_personal_info(self,blocks, block_dict):
+    def get_insured_and_agent_info(self,blocks, block_dict):
         Insured_dict = {}
         Agent_dict = {}
         Name = []

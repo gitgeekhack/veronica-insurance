@@ -12,7 +12,7 @@ class ITC_Type2:
         return dict
 
 
-    def get_personal_info(self,blocks):
+    def get_insured_and_agent_info(self,blocks):
         Insured_list = ['Name', 'Address', 'City,']
         Name = []
         Agent_Name = []

@@ -30,7 +30,7 @@ if length_blocks>5 and length_blocks<9:
 elif length_blocks == 17:
     type2 = ITC_Type2()
     blocks = page.getText("dict")['blocks']
-    Insured_dict, Agent_dict = type2.get_personal_info(blocks)
+    Insured_dict, Agent_dict = type2.get_insured_and_agent_info(blocks)
     print("----Insured INFO-----")
     print(Insured_dict)
     print("----Agent INFO----")
@@ -42,7 +42,7 @@ elif length_blocks == 17:
 elif length_blocks >= 11 and length_blocks<25:
     type4 = ITC_Type4()
     blocks = page.getText("dict")['blocks']
-    Insured_dict, Agent_dict = type4.get_personal_info(blocks)
+    Insured_dict, Agent_dict = type4.get_insured_and_agent_info(blocks)
     print("----Insured INFO-----")
     print(Insured_dict)
     print("----Agent INFO----")
@@ -62,7 +62,7 @@ elif length_blocks>=40:
     print(len(blocks))
     block_dict = type3.check_blocks(blocks, list)
     print("----PERSONAL INFO-----")
-    Insured_info, Agent_info = type3.get_personal_info(blocks, block_dict)
+    Insured_info, Agent_info = type3.get_insured_and_agent_info(blocks, block_dict)
     print(Insured_info)
     print(Agent_info)
     print("----Company INFO-----")
