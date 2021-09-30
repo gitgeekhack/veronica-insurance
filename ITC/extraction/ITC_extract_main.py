@@ -5,7 +5,7 @@ from extract_type3 import ITC_Type3
 from extract_type4 import ITC_Type4
 
 
-path = 'D:/Office/veronica-self/ITC/files/ITC examples 9-28-21/ITC CCS.pdf'
+path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_Alliance example 3 ITC.pdf.pdf'
 
 doc = fitz.open(path)
 page = doc[0]
@@ -14,7 +14,7 @@ blocks = page.getText("dict")['blocks']
 length_blocks = len(blocks)
 
 
-if length_blocks>5 and length_blocks<9:
+if 5 < length_blocks < 9:
     type1 = ITC_Type1()
     i = type1.check_blocks(blocks)
     print("----INSURED INFO-----")
@@ -43,8 +43,13 @@ elif length_blocks == 17:
     print("----Company INFO----")
     company_info = type2.get_company_info(blocks)
     print(company_info)
+    driver_info, vehicle_info = type2.get_driver_and_vehicle_info(blocks, doc)
+    print("----Driver INFO----")
+    print(driver_info)
+    print("----Vehicle INFO----")
+    print(vehicle_info)
     print("------------------------------------------------------------")
-elif length_blocks >= 11 and length_blocks<25:
+elif 11 <= length_blocks < 25:
     type4 = ITC_Type4()
     blocks = page.getText("dict")['blocks']
     insured_info, agent_info = type4.get_insured_and_agent_info(blocks)
@@ -55,6 +60,11 @@ elif length_blocks >= 11 and length_blocks<25:
     print("----Company INFO----")
     company_info = type4.get_company_info(blocks)
     print(company_info)
+    driver_info, vehicle_info = type4.get_driver_and_vehicle_info(blocks,doc)
+    print("----Driver INFO----")
+    print(driver_info)
+    print("----Vehicle INFO----")
+    print(vehicle_info)
     print("------------------------------------------------------------")
 elif length_blocks>=40:
     type3 = ITC_Type3()
@@ -65,9 +75,10 @@ elif length_blocks>=40:
             'Collision Deductible', 'Liability BI', 'Liability PD', 'Uninsured BI', 'Unins PD/Coll Ded',
             'Unins PD/Coll Ded Waiver']
     block_dict = type3.check_blocks(blocks, list)
-    print("----PERSONAL INFO-----")
+    print("----Insured INFO-----")
     insured_info, agent_info = type3.get_insured_and_agent_info(blocks, block_dict)
     print(insured_info)
+    print("----Agent INFO-----")
     print(agent_info)
     print("----Company INFO-----")
     company_info = type3.get_company_info(blocks, block_dict)

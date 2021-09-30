@@ -128,11 +128,12 @@ class ITC_Type4:
 
         return company_info_dict
 
-    def get_driver_info(self, blocks):
-        text_list = ['Company', 'ITC', 'Liability']
+    def get_driver_and_vehicle_info(self, blocks,doc):
+        text_list = ['Company', 'ITC', 'Liability', 'Total','Veh']
         driver_info_list = []
         block_dict = self.check_blocks(blocks, text_list, 5, len(blocks))
         driver_information_dict = {}
+        vehicle_info_dict = {}
         driver_info = []
         driver_dob = []
         fr_filing = []
@@ -282,4 +283,83 @@ class ITC_Type4:
         driver_information_dict['Collision Deductible'] = collision_deductible
         driver_information_dict['Uninsured BI'] = uninsured_bi
         driver_information_dict['Unins PD/Coll Ded Waiver'] = uninsured_pd
-        return driver_information_dict
+        veh = []
+        vehicle_info = []
+        if 'Total' in block_dict.keys():
+            veh = [x for x in range(0, len(blocks[block_dict['Total']]['lines'])) if
+                   blocks[block_dict['Total']]['lines'][x]['spans'][0]['text'] == 'Veh']
+            veh_attribute = [x for x in range(0, len(blocks[block_dict['Total']]['lines'])) if
+                             blocks[block_dict['Total']]['lines'][x]['spans'][0]['text'] == 'Vehicle Attributes']
+
+            if veh and veh_attribute:
+                for x in range(veh[0] + 5, veh_attribute[0]): vehicle_info.append(
+                    blocks[block_dict['Total']]['lines'][x]['spans'][0]['text'])
+            line = x
+            veh_info = []
+            for x in range(0, len(vehicle_info), 5):
+                veh_info.append(vehicle_info[x:x + 5])
+
+            annual_miles_driven =[]
+            v = max(len(veh_list),len(drv_list))
+            page = doc[0]
+            blocks = page.getText('dict')['blocks']
+            annual_miles_driven =[]
+            for i in range(0, len(blocks)):
+                if blocks[i]['type'] == 0:
+                    if len(blocks[i]['lines']) > 2:
+                        temp = [x for x in range(0, len(blocks[i]['lines'])) if
+                                blocks[i]['lines'][x]['spans'][0]['text'] == 'Annual Miles Driven']
+                        if len(temp) > 0:
+                            block_num = i
+                            line_num = temp[0]
+                            for x in range(temp[0] + 1, temp[0] + v + 1):
+                                annual_miles_driven.append(blocks[block_num]['lines'][x]['spans'][0]['text'])
+                            break
+            if not annual_miles_driven:
+                page = doc[1]
+                blocks = page.getText('dict')['blocks']
+                for i in range(0, len(blocks)):
+                    if blocks[i]['type'] == 0:
+                        if len(blocks[i]['lines']) > 2:
+                            temp = [x for x in range(0, len(blocks[i]['lines'])) if
+                                    blocks[i]['lines'][x]['spans'][0]['text'] == 'Annual Miles Driven']
+                            if len(temp) > 0:
+                                block_num = i
+                                line_num = temp[0]
+                                for x in range(temp[0] + 1, temp[0] + v + 1):
+                                    annual_miles_driven.append(blocks[block_num]['lines'][x]['spans'][0]['text'])
+                                break
+        if not vehicle_info:
+            page = doc[1]
+            block1 = page.getText('dict')['blocks']
+            list = ['Veh']
+            veh_dict = self.check_blocks(block1,list,0,len(block1))
+            blocks = block1
+            block_num=0
+            line_num=0
+            for i in range(0, len(blocks)):
+                if blocks[i]['type'] == 0:
+                    if len(blocks[i]['lines']) > 2:
+                        temp = [x for x in range(0, len(blocks[i]['lines'])) if
+                                blocks[i]['lines'][x]['spans'][0]['text'] == 'Vehicle Attributes']
+                        if len(temp) > 0:
+                            block_num = i
+                            line_num = temp[0]
+            vehicle=[]
+            if 'Veh' in veh_dict.keys():
+                    for i in range( veh_dict['Veh'] + 1,block_num):
+                        temp=[]
+                        for x in range(0, len(blocks[i]['lines'])):
+                            temp.append(blocks[i]['lines'][x]['spans'][0]['text'])
+                        vehicle.append(temp)
+
+            if vehicle:
+                for list in vehicle:
+                    if len(list[2]) > 1:
+                        x = list[1].split(' ')
+                        list[1:2] = x
+                    vehicle_info.append(list)
+
+        vehicle_info_dict['Annual miles'] = annual_miles_driven
+        vehicle_info_dict['Vehicle Info'] = vehicle_info
+        return driver_information_dict, vehicle_info_dict
