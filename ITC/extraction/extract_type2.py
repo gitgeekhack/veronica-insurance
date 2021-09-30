@@ -1,7 +1,3 @@
-import fitz
-import os
-
-
 class ITC_Type2:
     def check_blocks(self, blocks, list, s, e):
         block_dict = {}

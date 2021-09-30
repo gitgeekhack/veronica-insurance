@@ -1,10 +1,3 @@
-
-import fitz
-import os
-
-path = "D:/Office/veronica-self/ITC/out/big blocks_type1/"
-
-
 class ITC_Type1:
 
     def check_blocks(self, blocks):

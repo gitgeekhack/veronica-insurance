@@ -1,14 +1,3 @@
-import fitz
-import os
-import re
-
-info_block = 4
-Iname = 1
-Aname = 5
-
-path = "D:/Office/veronica-self/ITC/out/address split_type3/"
-
-
 class ITC_Type3:
     def check_blocks(self, blocks, list, end=50):
         block_dict = {}
