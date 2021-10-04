@@ -19,7 +19,7 @@ def read_from_dictionary(dictionary):
     for key, value in dictionary.items():
         if not value:
             value = None
-        if isinstance(value, type(list)):
+        if isinstance(value, list):
             value = [i for i in value if i != '\xa0']
         print(key, ": ", value)
 
@@ -85,12 +85,12 @@ elif 11 <= length_blocks < 25:
 elif length_blocks >= 40:
     type3 = ITC_Type3()
     blocks = page.getText("dict")['blocks']
-    list = ['Name', 'Address', 'Phone Number', 'Phone', 'Phone Number ( ) -', 'Work', 'Work Number', 'Company',
+    word_list = ['Name', 'Address', 'Phone Number', 'Phone', 'Phone Number ( ) -', 'Work', 'Work Number', 'Company',
             'Policy Term', 'Quote By', 'Driver Information', 'Driver DOB', 'FR Filing',
             'Comprehensive Deductible',
             'Collision Deductible', 'Liability BI', 'Liability PD', 'Uninsured BI', 'Unins PD/Coll Ded',
             'Unins PD/Coll Ded Waiver']
-    block_dict = type3.check_blocks(blocks, list)
+    block_dict = type3.check_blocks(blocks, word_list)
     print("----Insured INFO-----")
     insured_info, agent_info = type3.get_insured_and_agent_info(blocks, block_dict)
 
