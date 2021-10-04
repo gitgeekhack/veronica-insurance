@@ -4,8 +4,6 @@ from extract_type2 import ITC_Type2
 from extract_type3 import ITC_Type3
 from extract_type4 import ITC_Type4
 import time
-import time
-
 
 start = time.time()
 path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_Kemper 1_ITC.pdf.pdf'
@@ -15,13 +13,16 @@ page = doc[0]
 blocks = page.getText("dict")['blocks']
 
 length_blocks = len(blocks)
+
+
 def read_from_dictionary(dictionary):
-    for key,value in dictionary.items():
-        if value == '' or value==[]:
-            value=None
-        if type(value) == type([]):
+    for key, value in dictionary.items():
+        if not value:
+            value = None
+        if isinstance(value, type(list)):
             value = [i for i in value if i != '\xa0']
-        print(key,": ",value)
+        print(key, ": ", value)
+
 
 if 5 < length_blocks < 9:
     type1 = ITC_Type1()
@@ -35,7 +36,7 @@ if 5 < length_blocks < 9:
     print("\n----COMPANY INFO----")
     company_info = type1.get_company_info(blocks, i)
     read_from_dictionary(company_info)
-    driver_info,vehicle_info,driver_attribute = type1.get_driver_and_vehicle_info(blocks,i,doc)
+    driver_info, vehicle_info, driver_attribute = type1.get_driver_and_vehicle_info(blocks, i, doc)
     print("\n----Driver INFO----")
     read_from_dictionary(driver_info)
     print("\n----Vehicle INFO----")
@@ -54,7 +55,7 @@ elif length_blocks == 17:
     print("\n----Company INFO----")
     company_info = type2.get_company_info(blocks)
     read_from_dictionary(company_info)
-    driver_info, vehicle_info,driver_attribute = type2.get_driver_and_vehicle_info(blocks, doc)
+    driver_info, vehicle_info, driver_attribute = type2.get_driver_and_vehicle_info(blocks, doc)
     print("\n----Driver INFO----")
     read_from_dictionary(driver_info)
     print("\n----Vehicle INFO----")
@@ -73,7 +74,7 @@ elif 11 <= length_blocks < 25:
     print("\n----Company INFO----")
     company_info = type4.get_company_info(blocks)
     read_from_dictionary(company_info)
-    driver_info, vehicle_info,driver_attribute = type4.get_driver_and_vehicle_info(blocks,doc)
+    driver_info, vehicle_info, driver_attribute = type4.get_driver_and_vehicle_info(blocks, doc)
     print("\n----Driver INFO----")
     read_from_dictionary(driver_info)
     print("\n----Vehicle INFO----")
@@ -81,7 +82,7 @@ elif 11 <= length_blocks < 25:
     print("\n----Driver Attribute----")
     read_from_dictionary(driver_attribute)
     print("------------------------------------------------------------")
-elif length_blocks>=40:
+elif length_blocks >= 40:
     type3 = ITC_Type3()
     blocks = page.getText("dict")['blocks']
     list = ['Name', 'Address', 'Phone Number', 'Phone', 'Phone Number ( ) -', 'Work', 'Work Number', 'Company',
@@ -99,7 +100,7 @@ elif length_blocks>=40:
     print("\n----Company INFO-----")
     company_info = type3.get_company_info(blocks, block_dict)
     read_from_dictionary(company_info)
-    driver_info,vehicle_info,driver_attribute = type3.get_driver_and_vehicle_info(blocks,block_dict,doc)
+    driver_info, vehicle_info, driver_attribute = type3.get_driver_and_vehicle_info(blocks, block_dict, doc)
     print("\n----Driver INFO----")
     read_from_dictionary(driver_info)
     print("\n----Vehicle INFO----")
@@ -109,7 +110,6 @@ elif length_blocks>=40:
     print("------------------------------------------------------------")
 else:
     print("ERROR: INCORRECT PDF TYPE")
-
 
 end = time.time()
 

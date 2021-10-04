@@ -1,5 +1,4 @@
 class ITC_Type1:
-
     def check_blocks(self, blocks):
         for i in range(2, 5):
             if blocks[i]['lines'][0]['spans'][0]['text'] == 'Name':
@@ -47,7 +46,7 @@ class ITC_Type1:
         company_dict["Policy Term"] = text
         return company_dict
 
-    def get_driver_and_vehicle_info(self, blocks, block_number,doc):
+    def get_driver_and_vehicle_info(self, blocks, block_number, doc):
         driver_info_dict = {}
         temp_list = []
         i = block_number
@@ -68,21 +67,25 @@ class ITC_Type1:
         l = len(drv_list)
         # print(l)
         temp_list = [x for x in range(70, 100) if blocks[i]['lines'][x]['spans'][0]['text'] == 'Driver Information']
-        temp_list.extend([x for x in range(temp_list[0], 100) if blocks[i]['lines'][x]['spans'][0]['text'] == 'Driver DOB'])
+        temp_list.extend(
+            [x for x in range(temp_list[0], 100) if blocks[i]['lines'][x]['spans'][0]['text'] == 'Driver DOB'])
         driver_info = []
         driver_dob = []
         fr_filing = []
         comp_deductible = []
         coll_deductible = []
-        for x in range(temp_list[0] + 1, temp_list[0] + l + 1): driver_info.append(blocks[i]['lines'][x]['spans'][0]['text'])
+        for x in range(temp_list[0] + 1, temp_list[0] + l + 1): driver_info.append(
+            blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['Info'] = driver_info
 
-        for x in range(temp_list[1] + 1, temp_list[1] + l + 1): driver_dob.append(blocks[i]['lines'][x]['spans'][0]['text'])
+        for x in range(temp_list[1] + 1, temp_list[1] + l + 1): driver_dob.append(
+            blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['DOB'] = driver_dob
 
         temp_list.extend(
             [x for x in range(temp_list[1] + l + 1, 120) if blocks[i]['lines'][x]['spans'][0]['text'] == 'FR Filing'])
-        for x in range(temp_list[2] + 1, temp_list[2] + l + 1): fr_filing.append(blocks[i]['lines'][x]['spans'][0]['text'])
+        for x in range(temp_list[2] + 1, temp_list[2] + l + 1): fr_filing.append(
+            blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['FR filling'] = fr_filing
         line_number = len(blocks[i]['lines'])
 
@@ -132,7 +135,7 @@ class ITC_Type1:
             driver_info_dict['Unins PD/Coll Ded Waiver'] = blocks[i]['lines'][text[0] + 1]['spans'][0]['text']
         else:
             driver_info_dict['Unins PD/Coll Ded Waiver'] = None
-        vehicle_info_dict={}
+        vehicle_info_dict = {}
         text = []
         line_number = len(blocks[i + 1]['lines'])
         text = [x for x in range(0, line_number) if
@@ -152,11 +155,11 @@ class ITC_Type1:
             vehicle_info_dict['Vehicle Info'] = None
         v = len(veh_list)
         annual_miles_driven = []
-        temp = [x for x in range(line, len(blocks[i+1]['lines'])) if
-                blocks[i+1]['lines'][x]['spans'][0]['text'] == 'Annual Miles Driven']
+        temp = [x for x in range(line, len(blocks[i + 1]['lines'])) if
+                blocks[i + 1]['lines'][x]['spans'][0]['text'] == 'Annual Miles Driven']
         if temp:
-            for x in range(temp[0] + 1, temp[0]+v+1):
-                annual_miles_driven.append( blocks[i+1]['lines'][x]['spans'][0]['text'])
+            for x in range(temp[0] + 1, temp[0] + v + 1):
+                annual_miles_driven.append(blocks[i + 1]['lines'][x]['spans'][0]['text'])
 
         if not annual_miles_driven:
             page = doc[1]
@@ -168,7 +171,7 @@ class ITC_Type1:
                     if len(blocks[i]['lines']) > 2:
                         temp = [x for x in range(0, len(blocks[i]['lines'])) if
                                 blocks[i]['lines'][x]['spans'][0]['text'] == 'Annual Miles Driven']
-                        if len(temp)>0 :
+                        if len(temp) > 0:
                             block_num = i
                             line_num = temp[0]
                             break

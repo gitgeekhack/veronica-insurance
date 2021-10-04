@@ -113,7 +113,7 @@ class ITC_Type2:
             company_dict['Policy Term'] = blocks[block_dict['Company']]['lines'][end[0] + 1]['spans'][0]['text']
         return company_dict
 
-    def get_driver_and_vehicle_info(self, blocks,doc):
+    def get_driver_and_vehicle_info(self, blocks, doc):
         text_list = ['Company', 'ITC', 'Liability', 'Total', 'Veh']
         driver_info_list = []
         block_dict = self.check_blocks(blocks, text_list, 5, len(blocks))
@@ -318,9 +318,9 @@ class ITC_Type2:
             page = doc[1]
             block1 = page.getText('dict')['blocks']
             blocks = block1
-            block_end=[]
-            block_start=[]
-            vehicle=[]
+            block_end = []
+            block_start = []
+            vehicle = []
             for i in range(0, len(blocks)):
                 if blocks[i]['type'] == 0:
                     if len(blocks[i]['lines']) > 2:
@@ -338,8 +338,8 @@ class ITC_Type2:
                             block_end = i
                             line2 = temp[0]
             if not block_end:
-                block_end = block_start+v
-            for i in range(block_start+1, block_end):
+                block_end = block_start + v
+            for i in range(block_start + 1, block_end):
                 temp = []
                 for x in range(0, len(blocks[i]['lines'])):
                     temp.append(blocks[i]['lines'][x]['spans'][0]['text'])
