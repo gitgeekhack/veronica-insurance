@@ -52,7 +52,7 @@ class ITC_Type3:
                         'Policy Term': blocks[block_dict['Policy Term']]['lines'][1]['spans'][0]['text']}
         return company_dict
 
-    def get_driver_and_vehicle_info(self, blocks, block_dict,doc):
+    def get_driver_and_vehicle_info(self, blocks, block_dict, doc):
         driver_info_dict = {}
         vehicle_info_dict = {}
         start = block_dict.get("Quote By")
@@ -145,7 +145,7 @@ class ITC_Type3:
                 end = len(blocks)
                 block_dict = self.check_blocks(blocks, list, end)
                 if 'Veh' in block_dict.keys():
-                    for i in range(block_dict['Veh'] + 1, block_dict['Veh'] + len(veh_list)+1):
+                    for i in range(block_dict['Veh'] + 1, block_dict['Veh'] + len(veh_list) + 1):
                         list = []
                         for j in range(0, len(blocks[i]['lines'])):
                             list.append(blocks[i]['lines'][j]['spans'][0]['text'])
@@ -219,4 +219,27 @@ class ITC_Type3:
 
         vehicle_info_dict['Annual Miles Driven'] = annual_miles_driven
         vehicle_info_dict['Vehicle Information'] = vehicle_information
-        return driver_info_dict, vehicle_info_dict
+
+        driver_attribute_dict = {}
+        months_mvr_exp_us = []
+        months_foreign_license = []
+        list = ['Months MVR Experience U.S.', 'Months Foreign License']
+        for page in doc:
+            if not months_mvr_exp_us or not months_foreign_license:
+                blocks = page.getText('dict')['blocks']
+                block_dict = self.check_blocks(blocks, list, end=len(blocks))
+                if 'Months MVR Experience U.S.' in block_dict.keys() or 'Months Foreign License' in block_dict.keys():
+                    if 'Months MVR Experience U.S.' in block_dict.keys():
+                        for x in range(1, len(drv_list) + 1):
+                            months_mvr_exp_us.append(
+                                blocks[block_dict['Months MVR Experience U.S.']]['lines'][x]['spans'][0]['text'])
+                    if 'Months Foreign License' in block_dict.keys():
+                        for x in range(1, len(drv_list) + 1):
+                            months_foreign_license.append(
+                                blocks[block_dict['Months Foreign License']]['lines'][x]['spans'][0]['text'])
+
+        driver_attribute_dict['Months MVR Experience U.S.'] = months_mvr_exp_us
+        driver_attribute_dict['Months Foreign License'] = months_foreign_license
+
+        return driver_info_dict, vehicle_info_dict, driver_attribute_dict
+

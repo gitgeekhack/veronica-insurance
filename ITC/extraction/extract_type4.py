@@ -362,4 +362,36 @@ class ITC_Type4:
 
         vehicle_info_dict['Annual miles'] = annual_miles_driven
         vehicle_info_dict['Vehicle Info'] = vehicle_info
-        return driver_information_dict, vehicle_info_dict
+
+        block_dict = {}
+        driver_attribute_dict = {}
+        months_foreign_license = []
+        months_mvr_exp_us = []
+        for page in doc:
+            if not months_foreign_license or not months_mvr_exp_us:
+                blocks = page.getText('dict')['blocks']
+                for i in range(0, len(blocks)):
+                    if blocks[i]['type'] == 0:
+                        if len(blocks[i]['lines']) > 2:
+                            temp = [x for x in range(0, len(blocks[i]['lines'])) if
+                                    blocks[i]['lines'][x]['spans'][0]['text'] == 'Months Foreign License']
+                            if len(temp) > 0:
+                                block_dict['Months Foreign License'] = i
+                                for x in range(temp[0] + 1, temp[0] + len(drv_list)+1):
+                                    months_foreign_license.append(
+                                        blocks[block_dict['Months Foreign License']]['lines'][x]['spans'][0]['text'])
+
+                            temp = [x for x in range(0, len(blocks[i]['lines'])) if
+                                    blocks[i]['lines'][x]['spans'][0]['text'] == 'Months MVR Experience U.S.']
+                            if len(temp) > 0:
+                                block_dict['Months MVR Experience U.S.'] = i
+                                for x in range(temp[0] + 1, temp[0] + len(drv_list)+1):
+                                    months_mvr_exp_us.append(
+                                        blocks[block_dict['Months MVR Experience U.S.']]['lines'][x]['spans'][0][
+                                            'text'])
+                                break
+        driver_attribute_dict['Months MVR Experience U.S.'] = months_mvr_exp_us
+        driver_attribute_dict['Months Foreign License'] = months_foreign_license
+
+        return driver_information_dict, vehicle_info_dict,driver_attribute_dict
+

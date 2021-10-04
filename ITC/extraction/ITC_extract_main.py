@@ -3,68 +3,83 @@ from extract_type1 import ITC_Type1
 from extract_type2 import ITC_Type2
 from extract_type3 import ITC_Type3
 from extract_type4 import ITC_Type4
+import time
+import time
 
 
-path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_Alliance example 3 ITC.pdf.pdf'
+start = time.time()
+path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_Kemper 1_ITC.pdf.pdf'
 
 doc = fitz.open(path)
 page = doc[0]
 blocks = page.getText("dict")['blocks']
 
 length_blocks = len(blocks)
-
+def read_from_dictionary(dictionary):
+    for key,value in dictionary.items():
+        if value == '' or value==[]:
+            value=None
+        if type(value) == type([]):
+            value = [i for i in value if i != '\xa0']
+        print(key,": ",value)
 
 if 5 < length_blocks < 9:
     type1 = ITC_Type1()
     i = type1.check_blocks(blocks)
-    print("----INSURED INFO-----")
+    print("\n----INSURED INFO-----")
     insured_info = type1.get_insured_info(blocks, i)
-    print(insured_info)
-    print("----AGENT INFO-----")
+    read_from_dictionary(insured_info)
+    print("\n----AGENT INFO-----")
     agent_info = type1.get_agent_info(blocks, i)
-    print(agent_info)
-    print("----COMPANY INFO----")
+    read_from_dictionary(agent_info)
+    print("\n----COMPANY INFO----")
     company_info = type1.get_company_info(blocks, i)
-    print(company_info)
-    driver_info,vehicle_info = type1.get_driver_and_vehicle_info(blocks,i)
-    print("----Driver INFO----")
-    print(driver_info)
-    print("----Vehicle INFO----")
-    print(vehicle_info)
+    read_from_dictionary(company_info)
+    driver_info,vehicle_info,driver_attribute = type1.get_driver_and_vehicle_info(blocks,i,doc)
+    print("\n----Driver INFO----")
+    read_from_dictionary(driver_info)
+    print("\n----Vehicle INFO----")
+    read_from_dictionary(vehicle_info)
+    print("\n----Driver Attribute----")
+    read_from_dictionary(driver_attribute)
     print("------------------------------------------------------------")
 elif length_blocks == 17:
     type2 = ITC_Type2()
     blocks = page.getText("dict")['blocks']
     insured_info, agent_info = type2.get_insured_and_agent_info(blocks)
-    print("----Insured INFO-----")
-    print(insured_info)
-    print("----Agent INFO----")
-    print(agent_info)
-    print("----Company INFO----")
+    print("\n----Insured INFO-----")
+    read_from_dictionary(insured_info)
+    print("\n----Agent INFO----")
+    read_from_dictionary(agent_info)
+    print("\n----Company INFO----")
     company_info = type2.get_company_info(blocks)
-    print(company_info)
-    driver_info, vehicle_info = type2.get_driver_and_vehicle_info(blocks, doc)
-    print("----Driver INFO----")
-    print(driver_info)
-    print("----Vehicle INFO----")
-    print(vehicle_info)
+    read_from_dictionary(company_info)
+    driver_info, vehicle_info,driver_attribute = type2.get_driver_and_vehicle_info(blocks, doc)
+    print("\n----Driver INFO----")
+    read_from_dictionary(driver_info)
+    print("\n----Vehicle INFO----")
+    read_from_dictionary(vehicle_info)
+    print("\n----Driver Attribute----")
+    read_from_dictionary(driver_attribute)
     print("------------------------------------------------------------")
 elif 11 <= length_blocks < 25:
     type4 = ITC_Type4()
     blocks = page.getText("dict")['blocks']
     insured_info, agent_info = type4.get_insured_and_agent_info(blocks)
-    print("----Insured INFO-----")
-    print(insured_info)
-    print("----Agent INFO----")
-    print(agent_info)
-    print("----Company INFO----")
+    print("\n----Insured INFO-----")
+    read_from_dictionary(insured_info)
+    print("\n----Agent INFO----")
+    read_from_dictionary(agent_info)
+    print("\n----Company INFO----")
     company_info = type4.get_company_info(blocks)
-    print(company_info)
-    driver_info, vehicle_info = type4.get_driver_and_vehicle_info(blocks,doc)
-    print("----Driver INFO----")
-    print(driver_info)
-    print("----Vehicle INFO----")
-    print(vehicle_info)
+    read_from_dictionary(company_info)
+    driver_info, vehicle_info,driver_attribute = type4.get_driver_and_vehicle_info(blocks,doc)
+    print("\n----Driver INFO----")
+    read_from_dictionary(driver_info)
+    print("\n----Vehicle INFO----")
+    read_from_dictionary(vehicle_info)
+    print("\n----Driver Attribute----")
+    read_from_dictionary(driver_attribute)
     print("------------------------------------------------------------")
 elif length_blocks>=40:
     type3 = ITC_Type3()
@@ -77,15 +92,25 @@ elif length_blocks>=40:
     block_dict = type3.check_blocks(blocks, list)
     print("----Insured INFO-----")
     insured_info, agent_info = type3.get_insured_and_agent_info(blocks, block_dict)
-    print(insured_info)
-    print("----Agent INFO-----")
-    print(agent_info)
-    print("----Company INFO-----")
+
+    read_from_dictionary(insured_info)
+    print("\n----Agent INFO-----")
+    read_from_dictionary(agent_info)
+    print("\n----Company INFO-----")
     company_info = type3.get_company_info(blocks, block_dict)
-    print(company_info)
-    driver_info,vehicle_info = type3.get_driver_and_vehicle_info(blocks,block_dict,doc)
-    print("----Driver INFO----")
-    print(driver_info)
-    print("----Vehicle INFO----")
-    print(vehicle_info)
+    read_from_dictionary(company_info)
+    driver_info,vehicle_info,driver_attribute = type3.get_driver_and_vehicle_info(blocks,block_dict,doc)
+    print("\n----Driver INFO----")
+    read_from_dictionary(driver_info)
+    print("\n----Vehicle INFO----")
+    read_from_dictionary(vehicle_info)
+    print("\n----Driver Attribute----")
+    read_from_dictionary(driver_attribute)
     print("------------------------------------------------------------")
+else:
+    print("ERROR: INCORRECT PDF TYPE")
+
+
+end = time.time()
+
+print(f"Runtime of the program is {end - start}")
