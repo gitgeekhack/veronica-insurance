@@ -1,9 +1,9 @@
 class ITC_Type3:
-    def check_blocks(self, blocks, list, end=50):
+    def check_blocks(self, blocks, word_list, end=50):
         block_dict = {}
         for i in range(0, end):
             if blocks[i]['type'] == 0:
-                if blocks[i]['lines'][0]['spans'][0]['text'] in list:
+                if blocks[i]['lines'][0]['spans'][0]['text'] in word_list:
                     block_dict[blocks[i]['lines'][0]['spans'][0]['text']] = i
         return block_dict
 
@@ -52,7 +52,7 @@ class ITC_Type3:
                         'Policy Term': blocks[block_dict['Policy Term']]['lines'][1]['spans'][0]['text']}
         return company_dict
 
-    def get_driver_and_vehicle_info(self, blocks, block_dict,doc):
+    def get_driver_and_vehicle_info(self, blocks, block_dict, doc):
         driver_info_dict = {}
         vehicle_info_dict = {}
         start = block_dict.get("Quote By")
@@ -141,21 +141,21 @@ class ITC_Type3:
                             list[1:2] = x
                         vehicle_information.append(list)
             else:
-                list = ['Veh']
+                word_list = ['Veh']
                 end = len(blocks)
-                block_dict = self.check_blocks(blocks, list, end)
+                block_dict = self.check_blocks(blocks, word_list, end)
                 if 'Veh' in block_dict.keys():
-                    for i in range(block_dict['Veh'] + 1, block_dict['Veh'] + len(veh_list)+1):
-                        list = []
+                    for i in range(block_dict['Veh'] + 1, block_dict['Veh'] + len(veh_list) + 1):
+                        temp_list = []
                         for j in range(0, len(blocks[i]['lines'])):
-                            list.append(blocks[i]['lines'][j]['spans'][0]['text'])
-                        vehicle.append(list)
+                            temp_list.append(blocks[i]['lines'][j]['spans'][0]['text'])
+                        vehicle.append(temp_list)
                     if vehicle:
-                        for list in vehicle:
-                            if len(list[2]) > 1:
-                                x = list[1].split(' ')
-                                list[1:2] = x
-                            vehicle_information.append(list)
+                        for temp_list in vehicle:
+                            if len(temp_list[2]) > 1:
+                                x = temp_list[1].split(' ')
+                                temp_list[1:2] = x
+                            vehicle_information.append(temp_list)
         page = doc[0]
         blocks = page.getText('dict')['blocks']
         for i in range(0, len(blocks)):
@@ -183,40 +183,62 @@ class ITC_Type3:
                             for x in range(temp[0] + 1, temp[0] + v + 1):
                                 annual_miles_driven.append(blocks[block_num]['lines'][x]['spans'][0]['text'])
                             break
-            list = ['Vehicle Information', 'Vehicle Attributes', 'Veh']
+            word_list = ['Vehicle Information', 'Vehicle Attributes', 'Veh']
             end = len(blocks)
-            block_dict = self.check_blocks(blocks, list, end)
+            block_dict = self.check_blocks(blocks, word_list, end)
             if block_dict:
                 if 'Veh' in block_dict.keys() and 'Vehicle Attributes' in block_dict.keys():
                     veh = block_dict['Veh']
                     end = block_dict['Vehicle Attributes']
                     vehicle = []
                     for i in range(veh + 1, end):
-                        list = []
+                        temp_list = []
                         for j in range(0, len(blocks[i]['lines'])):
-                            list.append(blocks[i]['lines'][j]['spans'][0]['text'])
-                        vehicle.append(list)
+                            temp_list.append(blocks[i]['lines'][j]['spans'][0]['text'])
+                        vehicle.append(temp_list)
                     if vehicle:
-                        for list in vehicle:
-                            if len(list[2]) > 1:
-                                x = list[1].split(' ')
-                                list[1:2] = x
-                            vehicle_information.append(list)
+                        for temp_list in vehicle:
+                            if len(temp_list[2]) > 1:
+                                x = temp_list[1].split(' ')
+                                temp_list[1:2] = x
+                            vehicle_information.append(temp_list)
 
                 elif 'Vehicle Attributes' in block_dict.keys():
                     end = block_dict['Vehicle Attributes']
                     for i in range(end - v + 1, end):
-                        list = []
+                        temp_list = []
                         for j in range(0, len(blocks[i]['lines'])):
-                            list.append(blocks[i]['lines'][j]['spans'][0]['text'])
-                        vehicle.append(list)
+                            temp_list.append(blocks[i]['lines'][j]['spans'][0]['text'])
+                        vehicle.append(temp_list)
                     if vehicle:
-                        for list in vehicle:
-                            if len(list[2]) > 1:
-                                x = list[1].split(' ')
-                                list[1:2] = x
-                            vehicle_information.append(list)
+                        for temp_list in vehicle:
+                            if len(temp_list[2]) > 1:
+                                x = temp_list[1].split(' ')
+                                temp_list[1:2] = x
+                            vehicle_information.append(temp_list)
 
         vehicle_info_dict['Annual Miles Driven'] = annual_miles_driven
         vehicle_info_dict['Vehicle Information'] = vehicle_information
-        return driver_info_dict, vehicle_info_dict
+
+        driver_attribute_dict = {}
+        months_mvr_exp_us = []
+        months_foreign_license = []
+        word_list = ['Months MVR Experience U.S.', 'Months Foreign License']
+        for page in doc:
+            if not months_mvr_exp_us or not months_foreign_license:
+                blocks = page.getText('dict')['blocks']
+                block_dict = self.check_blocks(blocks, word_list, end=len(blocks))
+                if 'Months MVR Experience U.S.' in block_dict.keys() or 'Months Foreign License' in block_dict.keys():
+                    if 'Months MVR Experience U.S.' in block_dict.keys():
+                        for x in range(1, len(drv_list) + 1):
+                            months_mvr_exp_us.append(
+                                blocks[block_dict['Months MVR Experience U.S.']]['lines'][x]['spans'][0]['text'])
+                    if 'Months Foreign License' in block_dict.keys():
+                        for x in range(1, len(drv_list) + 1):
+                            months_foreign_license.append(
+                                blocks[block_dict['Months Foreign License']]['lines'][x]['spans'][0]['text'])
+
+        driver_attribute_dict['Months MVR Experience U.S.'] = months_mvr_exp_us
+        driver_attribute_dict['Months Foreign License'] = months_foreign_license
+
+        return driver_info_dict, vehicle_info_dict, driver_attribute_dict
