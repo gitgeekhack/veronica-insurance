@@ -64,8 +64,7 @@ class ITC_Type1:
         drv_list = [x for x in temp_list if "Drv" in x]
         driver_info_dict['Vehicles'] = veh_list
         driver_info_dict['Drivers'] = drv_list
-        l = len(drv_list)
-        # print(l)
+
         temp_list = [x for x in range(70, 100) if blocks[i]['lines'][x]['spans'][0]['text'] == 'Driver Information']
         temp_list.extend(
             [x for x in range(temp_list[0], 100) if blocks[i]['lines'][x]['spans'][0]['text'] == 'Driver DOB'])
@@ -74,33 +73,34 @@ class ITC_Type1:
         fr_filing = []
         comp_deductible = []
         coll_deductible = []
-        for x in range(temp_list[0] + 1, temp_list[0] + l + 1): driver_info.append(
+        for x in range(temp_list[0] + 1, temp_list[0] + len(drv_list) + 1): driver_info.append(
             blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['Info'] = driver_info
 
-        for x in range(temp_list[1] + 1, temp_list[1] + l + 1): driver_dob.append(
+        for x in range(temp_list[1] + 1, temp_list[1] + len(drv_list) + 1): driver_dob.append(
             blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['DOB'] = driver_dob
 
         temp_list.extend(
-            [x for x in range(temp_list[1] + l + 1, 120) if blocks[i]['lines'][x]['spans'][0]['text'] == 'FR Filing'])
-        for x in range(temp_list[2] + 1, temp_list[2] + l + 1): fr_filing.append(
+            [x for x in range(temp_list[1] + len(drv_list) + 1, 120) if
+             blocks[i]['lines'][x]['spans'][0]['text'] == 'FR Filing'])
+        for x in range(temp_list[2] + 1, temp_list[2] + len(drv_list) + 1): fr_filing.append(
             blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['FR filling'] = fr_filing
         line_number = len(blocks[i]['lines'])
 
         text = [x for x in range(temp_list[0], line_number) if
                 blocks[i]['lines'][x]['spans'][0]['text'] == 'Comprehensive Deductible']
-        v = len(veh_list)
+
         if text:
-            for x in range(text[0] + 1, text[0] + v + 1): comp_deductible.append(
+            for x in range(text[0] + 1, text[0] + len(veh_list) + 1): comp_deductible.append(
                 blocks[i]['lines'][x]['spans'][0]['text'])
         driver_info_dict['Comprehensive Deductible'] = comp_deductible
 
         text = [x for x in range(temp_list[0], line_number) if
                 blocks[i]['lines'][x]['spans'][0]['text'] == 'Collision Deductible']
         if text:
-            for x in range(text[0] + 1, text[0] + v + 1): coll_deductible.append(
+            for x in range(text[0] + 1, text[0] + len(veh_list) + 1): coll_deductible.append(
                 blocks[i]['lines'][x]['spans'][0]['text'])
 
         driver_info_dict['Collision Deductible'] = coll_deductible
@@ -153,12 +153,12 @@ class ITC_Type1:
             vehicle_info_dict['Vehicle Info'] = veh_info
         else:
             vehicle_info_dict['Vehicle Info'] = None
-        v = len(veh_list)
+
         annual_miles_driven = []
         temp = [x for x in range(line, len(blocks[i + 1]['lines'])) if
                 blocks[i + 1]['lines'][x]['spans'][0]['text'] == 'Annual Miles Driven']
         if temp:
-            for x in range(temp[0] + 1, temp[0] + v + 1):
+            for x in range(temp[0] + 1, temp[0] + len(veh_list) + 1):
                 annual_miles_driven.append(blocks[i + 1]['lines'][x]['spans'][0]['text'])
 
         if not annual_miles_driven:
@@ -175,7 +175,7 @@ class ITC_Type1:
                             block_num = i
                             line_num = temp[0]
                             break
-            for x in range(temp[0] + 1, temp[0] + v + 1):
+            for x in range(temp[0] + 1, temp[0] + len(veh_list) + 1):
                 annual_miles_driven.append(blocks[block_num]['lines'][x]['spans'][0]['text'])
         vehicle_info_dict['Annual Miles'] = annual_miles_driven
         block_dict = {}
