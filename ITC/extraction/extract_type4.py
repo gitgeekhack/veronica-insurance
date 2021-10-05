@@ -1,10 +1,10 @@
 class ITC_Type4:
-    def check_blocks(self, blocks, list, s, e):
+    def check_blocks(self, blocks, word_list, s, e):
         block_dict = {}
         for i in range(s, e):
             if blocks[i]['type'] == 0:
                 temp = blocks[i]['lines'][0]['spans'][0]['text'].split(' ')[0]
-                if (temp) in list:
+                if (temp) in word_list:
                     block_dict[temp] = i
         return block_dict
 
@@ -396,3 +396,42 @@ class ITC_Type4:
         driver_attribute_dict['Months Foreign License'] = months_foreign_license
 
         return driver_information_dict, vehicle_info_dict, driver_attribute_dict
+
+    def get_driver_violations(self, doc):
+        driver_violations_dict = {}
+        block_dict = {}
+        line_dict = {}
+        count = 0
+        violations = []
+        start = []
+        end = []
+        list = ['Driver Violations', 'Driver Suspensions/Reinstatements']
+        for page in doc:
+            if not count:
+                blocks = page.getText('dict')['blocks']
+                for i in range(0, len(blocks)):
+                    if blocks[i]['type'] == 0:
+                        if len(blocks[i]['lines']) > 2:
+                            for x in range(0, len(blocks[i]['lines'])):
+                                temp = blocks[i]['lines'][x]['spans'][0]['text']
+                                if temp in list:
+                                    block_dict[temp] = i
+                                    line_dict[temp] = x
+
+                if 'Driver Suspensions/Reinstatements' in block_dict.keys():
+                    for i in range(block_dict['Driver Violations'],
+                                   block_dict['Driver Suspensions/Reinstatements'] + 1):
+                        for x in range(len(blocks[i]['lines'])):
+                            violations.append(blocks[i]['lines'][x]['spans'][0]['text'])
+                    start = violations.index('Driver Violations')
+                    end = violations.index('Driver Suspensions/Reinstatements')
+                    violations = violations[start + 1:end]
+                    break
+        if violations:
+            if violations[0] == 'None':
+                count = 0
+            else:
+                v = [violations[x:x + 6] for x in range(0, len(violations), 7)]
+                count = len(v) - 1
+        driver_violations_dict['Driver Violations'] = count
+        return driver_violations_dict
