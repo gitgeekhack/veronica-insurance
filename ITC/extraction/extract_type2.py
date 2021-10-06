@@ -4,7 +4,7 @@ class ITC_Type2:
         for i in range(s, e):
             if blocks[i]['type'] == 0:
                 temp = blocks[i]['lines'][0]['spans'][0]['text'].split(' ')[0]
-                if (temp) in word_list:
+                if temp in word_list:
                     block_dict[temp] = i
         return block_dict
 
