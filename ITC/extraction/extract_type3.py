@@ -242,3 +242,23 @@ class ITC_Type3:
         driver_attribute_dict['Months Foreign License'] = months_foreign_license
 
         return driver_info_dict, vehicle_info_dict, driver_attribute_dict
+
+    def get_driver_violations(self, doc):
+        driver_violations_dict = {}
+        count = 0
+        list = ['Driver Violations', 'Driver Suspensions/Reinstatements']
+        for page in doc:
+            if not count:
+                blocks = page.getText('dict')['blocks']
+                block_dict = self.check_blocks(blocks, list, end=len(blocks))
+                if 'Driver Violations' in block_dict.keys():
+                    if blocks[block_dict['Driver Violations'] + 1]['lines'][0]['spans'][0]['text'] == 'None':
+                        count = 0
+                    else:
+                        if blocks[block_dict['Driver Suspensions/Reinstatements']]:
+                            for i in range(block_dict['Driver Violations'] + 2,
+                                           block_dict['Driver Suspensions/Reinstatements']):
+                                count = count + 1
+
+        driver_violations_dict['Driver Violations'] = count
+        return driver_violations_dict

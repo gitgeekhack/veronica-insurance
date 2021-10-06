@@ -6,7 +6,7 @@ from extract_type4 import ITC_Type4
 import time
 
 start = time.time()
-path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_Kemper 1_ITC.pdf.pdf'
+path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_ITC_CHRISTINA AVALOS.pdf.pdf'
 
 doc = fitz.open(path)
 page = doc[0]
@@ -43,6 +43,9 @@ if 5 < length_blocks < 9:
     read_from_dictionary(vehicle_info)
     print("\n----Driver Attribute----")
     read_from_dictionary(driver_attribute)
+    driver_violations = type1.get_driver_violations(doc)
+    print("\n----Driver Violations----")
+    read_from_dictionary(driver_violations)
     print("------------------------------------------------------------")
 elif length_blocks == 17:
     type2 = ITC_Type2()
@@ -62,6 +65,9 @@ elif length_blocks == 17:
     read_from_dictionary(vehicle_info)
     print("\n----Driver Attribute----")
     read_from_dictionary(driver_attribute)
+    driver_violations = type2.get_driver_violations(doc)
+    print("\n----Driver Violations----")
+    read_from_dictionary(driver_violations)
     print("------------------------------------------------------------")
 elif 11 <= length_blocks < 25:
     type4 = ITC_Type4()
@@ -81,15 +87,18 @@ elif 11 <= length_blocks < 25:
     read_from_dictionary(vehicle_info)
     print("\n----Driver Attribute----")
     read_from_dictionary(driver_attribute)
+    driver_violations = type4.get_driver_violations(doc)
+    print("\n----Driver Violations----")
+    read_from_dictionary(driver_violations)
     print("------------------------------------------------------------")
 elif length_blocks >= 40:
     type3 = ITC_Type3()
     blocks = page.getText("dict")['blocks']
     word_list = ['Name', 'Address', 'Phone Number', 'Phone', 'Phone Number ( ) -', 'Work', 'Work Number', 'Company',
-            'Policy Term', 'Quote By', 'Driver Information', 'Driver DOB', 'FR Filing',
-            'Comprehensive Deductible',
-            'Collision Deductible', 'Liability BI', 'Liability PD', 'Uninsured BI', 'Unins PD/Coll Ded',
-            'Unins PD/Coll Ded Waiver']
+                 'Policy Term', 'Quote By', 'Driver Information', 'Driver DOB', 'FR Filing',
+                 'Comprehensive Deductible',
+                 'Collision Deductible', 'Liability BI', 'Liability PD', 'Uninsured BI', 'Unins PD/Coll Ded',
+                 'Unins PD/Coll Ded Waiver']
     block_dict = type3.check_blocks(blocks, word_list)
     print("----Insured INFO-----")
     insured_info, agent_info = type3.get_insured_and_agent_info(blocks, block_dict)
@@ -107,6 +116,9 @@ elif length_blocks >= 40:
     read_from_dictionary(vehicle_info)
     print("\n----Driver Attribute----")
     read_from_dictionary(driver_attribute)
+    driver_violations = type3.get_driver_violations(doc)
+    print("\n----Driver Violations----")
+    read_from_dictionary(driver_violations)
     print("------------------------------------------------------------")
 else:
     print("ERROR: INCORRECT PDF TYPE")
