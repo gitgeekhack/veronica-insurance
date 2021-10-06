@@ -435,3 +435,36 @@ class ITC_Type4:
                 count = len(v) - 1
         driver_violations_dict['Driver Violations'] = count
         return driver_violations_dict
+
+    def get_excluded_driver(self, doc):
+        driver_dict = {}
+        excluded_driver_dict = {}
+        v = []
+        count = 0
+        temp_list = []
+
+        for page in doc:
+            if not count:
+                blocks = page.getText('dict')['blocks']
+                for i in range(0, len(blocks)):
+                    if blocks[i]['type'] == 0 and len(blocks[i]['lines']) > 2:
+                        for x in range(0, len(blocks[i]['lines'])):
+                            temp = blocks[i]['lines'][x]['spans'][0]['text']
+                            if temp == 'Excluded Driver(s)':
+                                for j in range(x, len(blocks[i]['lines'])):
+                                    temp_list.append(blocks[i]['lines'][j]['spans'][0]['text'])
+                                break
+        if temp_list:
+            name = temp_list.index('Relationship')
+            temp_list = temp_list[name + 1:]
+            v = [temp_list[x:x + 5] for x in range(0, len(temp_list), 5)]
+            if v:
+                for i in range(0, len(v)):
+                    temp_dict = {}
+                    if len(v[i]) == 5:
+                        count = count + 1
+                        temp_dict['Name'] = v[i][0]
+                        temp_dict['DOB'] = v[i][1]
+                        excluded_driver_dict[count] = temp_dict
+        driver_dict['Excluded Driver(s)'] = excluded_driver_dict
+        return driver_dict

@@ -262,3 +262,38 @@ class ITC_Type3:
 
         driver_violations_dict['Driver Violations'] = count
         return driver_violations_dict
+
+    def get_excluded_driver(self, doc):
+        driver_dict = {}
+        excluded_driver_dict = {}
+        v = []
+        count = 0
+        temp_list = []
+        block_dict = {}
+        word_list = ['Excluded Driver(s)']
+        for page in doc:
+            if not block_dict:
+                blocks = page.getText('dict')['blocks']
+                block_dict = self.check_blocks(blocks, word_list, end=len(blocks))
+            if block_dict:
+                break
+
+        if block_dict:
+            for i in range(block_dict['Excluded Driver(s)'] + 2, len(blocks) - 1):
+
+                if blocks[i]['type'] == 0:
+                    for x in range(0, len(blocks[i]['lines'])):
+                        temp_list.append(blocks[i]['lines'][x]['spans'][0]['text'])
+            if temp_list:
+                v = [temp_list[x:x + 5] for x in range(0, len(temp_list), 5)]
+            if v:
+                for i in range(0, len(v)):
+                    temp_dict = {}
+                    if len(v[i]) == 5:
+                        count = count + 1
+                        temp_dict['Name'] = v[i][0]
+                        temp_dict['DOB'] = v[i][1]
+                        excluded_driver_dict[count] = temp_dict
+
+        driver_dict['Excluded Driver(s)'] = excluded_driver_dict
+        return driver_dict
