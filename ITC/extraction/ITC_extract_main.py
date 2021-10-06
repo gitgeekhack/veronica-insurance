@@ -6,7 +6,7 @@ from extract_type4 import ITC_Type4
 import time
 
 start = time.time()
-path = 'D:/Office/veronica-self/ITC/out/address split_type3/out_ITC_CHRISTINA AVALOS.pdf.pdf'
+path = 'D:/Office/veronica-self/ITC/out/address big box_type4/out_ITC_Alex Zuniga.pdf.pdf'
 
 doc = fitz.open(path)
 page = doc[0]
@@ -46,6 +46,9 @@ if 5 < length_blocks < 9:
     driver_violations = type1.get_driver_violations(doc)
     print("\n----Driver Violations----")
     read_from_dictionary(driver_violations)
+    print("\n----Excluded Driver(s)----")
+    excluded_driver = type1.get_excluded_driver(doc)
+    read_from_dictionary(excluded_driver)
     print("------------------------------------------------------------")
 elif length_blocks == 17:
     type2 = ITC_Type2()
@@ -68,6 +71,9 @@ elif length_blocks == 17:
     driver_violations = type2.get_driver_violations(doc)
     print("\n----Driver Violations----")
     read_from_dictionary(driver_violations)
+    print("\n----Excluded Driver(s)----")
+    excluded_driver = type2.get_excluded_driver(doc)
+    read_from_dictionary(excluded_driver)
     print("------------------------------------------------------------")
 elif 11 <= length_blocks < 25:
     type4 = ITC_Type4()
@@ -90,6 +96,9 @@ elif 11 <= length_blocks < 25:
     driver_violations = type4.get_driver_violations(doc)
     print("\n----Driver Violations----")
     read_from_dictionary(driver_violations)
+    print("\n----Excluded Driver(s)----")
+    excluded_driver = type4.get_excluded_driver(doc)
+    read_from_dictionary(excluded_driver)
     print("------------------------------------------------------------")
 elif length_blocks >= 40:
     type3 = ITC_Type3()
@@ -119,6 +128,9 @@ elif length_blocks >= 40:
     driver_violations = type3.get_driver_violations(doc)
     print("\n----Driver Violations----")
     read_from_dictionary(driver_violations)
+    print("\n----Excluded Driver(s)----")
+    excluded_driver = type3.get_excluded_driver(doc)
+    read_from_dictionary(excluded_driver)
     print("------------------------------------------------------------")
 else:
     print("ERROR: INCORRECT PDF TYPE")
