@@ -14,11 +14,11 @@ class SignatureClassifier:
         img_array = tf.expand_dims(img_array, 0)
         return img_array
 
-    def predict(self, path):
+    def classify(self, path):
         data = self.__preprocess(path)
         return "Signature" if model.predict(data) > 0 else "No_Signature"
 
 
 v = SignatureClassifier()
 model = load_model(model_path)
-print(v.predict(image_path))
+print(v.classify(image_path))
