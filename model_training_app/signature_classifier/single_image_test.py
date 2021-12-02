@@ -19,6 +19,6 @@ class SignatureClassifier:
         return "Signature" if model.predict(data) > 0 else "No_Signature"
 
 
-v = SignatureClassifier()
+classifier = SignatureClassifier()
 model = load_model(model_path)
-print(v.classify(image_path))
+print(classifier.classify(image_path))
