@@ -38,7 +38,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                     input_image = cv2.imdecode(np_array, cv2.IMREAD_UNCHANGED)
                     trans_mask = input_image[:, :, 3] == 0
                     input_image[trans_mask] = [255, 255, 255, 255]
-                    new_img = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
+                    new_img = cv2.cvtColor(input_image, cv2.COLOR_BGRA2BGR)
                     blocks = new_pdf[page_number].getText('dict')['blocks']
                     date = check_date(blocks)
                     if date:
@@ -57,7 +57,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                         try:
                             np_array = np.asarray(bytearray(pix.getImageData()), dtype=np.uint8)
                             input_image = cv2.imdecode(np_array, cv2.IMREAD_UNCHANGED)
-                            new_img = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
+                            new_img = cv2.cvtColor(input_image, cv2.COLOR_BGRA2BGR)
                         except Exception as e:
                             cv2.imwrite(image_path + file.split('.')[0] + str(page_number + 1) + '_'
                                         + str(image_number_on_page) + '.png', input_image)
@@ -68,7 +68,7 @@ for root, dirs, files in os.walk(path, topdown=True):
                         pix1 = fitz.Pixmap(fitz.csRGB, pix)
                         np_array = np.asarray(bytearray(pix1.getImageData()), dtype=np.uint8)
                         input_image = cv2.imdecode(np_array, cv2.IMREAD_UNCHANGED)
-                        new_img = cv2.cvtColor(input_image, cv2.COLOR_BGR2GRAY)
+                        new_img = cv2.cvtColor(input_image, cv2.COLOR_BGRA2BGR)
                         cv2.imwrite(image_path + file.split('.')[0] + str(page_number + 1) + '_'
                                     + str(image_number_on_page) + '.png', new_img)
                         image_number_on_page += 1
