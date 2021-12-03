@@ -1,24 +1,46 @@
+import inspect
+from datetime import datetime
+
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 img_size = 150
-image_path = 'Sign3.png'
 model_path = './models/20211202_0446/model.h5'
+
+
+def stop_watch(f):
+    """The method provides execution time of the method it is used upon."""
+
+    def timer(*args, **kwargs):
+        start = datetime.now()
+        x = f(*args, **kwargs)
+        end = datetime.now()
+        diff = end - start
+        diff = diff.microseconds / 1000
+        print(f'{args[1]} => {x:>12} | Took: [{diff:>7}] ms')
+        return x
+
+    return timer
 
 
 class SignatureClassifier:
 
+    def __init__(self):
+        self.model = load_model(model_path)
+
     def __preprocess(self, path):
-        img = tf.keras.utils.load_img(path, target_size=(150, 150))
+        img = tf.keras.utils.load_img('./test_imgs/' + path, target_size=(150, 150))
         img_array = tf.keras.utils.img_to_array(img) / 255
         img_array = tf.expand_dims(img_array, 0)
         return img_array
 
+    @stop_watch
     def classify(self, path):
         data = self.__preprocess(path)
-        return "Signature" if model.predict(data) > 0 else "No_Signature"
+        result = "Signature" if self.model.predict(data) > 0 else "No_Signature"
+        return result
 
 
 classifier = SignatureClassifier()
-model = load_model(model_path)
-print(classifier.classify(image_path))
+test_list = []
+classifier.classify('Untitled1.png')
