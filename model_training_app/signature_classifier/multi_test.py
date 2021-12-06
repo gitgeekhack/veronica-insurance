@@ -1,23 +1,17 @@
 import os
+from datetime import datetime
 
 import pandas as pd
+import tensorflow as tf
 from tensorflow.keras.models import load_model
 
 from constants import MODEL_PATH
 
-model = load_model(MODEL_PATH)
 # target = '../../data/Signature/dataset/test/'
 target = './test_imgs/'
 master_list = []
 
-import inspect
-from datetime import datetime
-
-import tensorflow as tf
-from tensorflow.keras.models import load_model
-
 img_size = 150
-model_path = './models/20211202_0446/model.h5'
 
 
 def stop_watch(f):
@@ -38,7 +32,7 @@ def stop_watch(f):
 class SignatureClassifier:
 
     def __init__(self):
-        self.model = load_model(model_path)
+        self.model = load_model(MODEL_PATH)
 
     def __preprocess(self, path):
         img = tf.keras.utils.load_img(path, target_size=(150, 150))

@@ -1,11 +1,8 @@
 import tensorflow as tf
 import tensorflow_datasets as tfds
-from tensorflow import keras
-from tqdm.keras import TqdmCallback
 from tensorflow.keras.models import load_model
 
-from constants import DATASET_PATH, MODEL_PATH, LOG_PATH, IMG_SIZE, BATCH_SIZE, SHUFFLE_BUFFER_SIZE, IMG_SHAPE, \
-    LEARNING_RATE, NO_OF_EPOCHS
+from constants import DATASET_PATH, MODEL_PATH, IMG_SIZE, BATCH_SIZE, SHUFFLE_BUFFER_SIZE
 
 
 # resize the image of same size

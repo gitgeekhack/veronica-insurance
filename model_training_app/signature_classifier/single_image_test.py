@@ -4,8 +4,8 @@ from datetime import datetime
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
+from constants import MODEL_PATH
 img_size = 150
-model_path = './models/20211202_0446/model.h5'
 
 
 def stop_watch(f):
@@ -26,10 +26,10 @@ def stop_watch(f):
 class SignatureClassifier:
 
     def __init__(self):
-        self.model = load_model(model_path)
+        self.model = load_model(MODEL_PATH)
 
     def __preprocess(self, path):
-        img = tf.keras.utils.load_img('./test_imgs/' + path, target_size=(150, 150))
+        img = tf.keras.utils.load_img(path, target_size=(150, 150))
         img_array = tf.keras.utils.img_to_array(img) / 255
         img_array = tf.expand_dims(img_array, 0)
         return img_array
