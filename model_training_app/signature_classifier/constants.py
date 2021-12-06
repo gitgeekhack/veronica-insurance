@@ -1,6 +1,6 @@
 # Variables
 DATASET_PATH = '../../data/Signature/dataset/'
-MODEL_NAME = '20211202_0446'
+MODEL_NAME = '20211206_1136'
 MODEL_PATH = f'./models/{MODEL_NAME}/model.h5'
 LOG_PATH = f'./logs/{MODEL_NAME}'
 IMG_SIZE = 150
