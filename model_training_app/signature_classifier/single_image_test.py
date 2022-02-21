@@ -43,4 +43,6 @@ class SignatureClassifier:
 
 classifier = SignatureClassifier()
 test_list = []
-classifier.classify('./sample/Untitled1.png')
++\
+
+    classifier.classify('./sample/VER_PTP_Armanza Santacruz, Maria1_3.png')
