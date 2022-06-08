@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    <title>PDF Extraction</title>
+{% endblock %}
+
+
+{% block heading %}
+    <div class="display-6 newnav" >
+        <div style="width: 100%; text-align:center;"><a style="font-size:1.3em;">PDF Annotation and Extraction</a></div>
+    </div>
+{% endblock %}
+
+
+{% block data %}
+    <br>
+    <h3 style="text-align:center;">Here you can Annotate PDF and Extract data from PDFs similar to Annotated PDF</h3>
+    <br>
+
+    <div style="width: 100%; text-align:center;">
+        <div class="d-grid gap-5 d-md-block">
+            <a class="btn btn-outline-dark" href="/annotate" role="button">Annotate PDF</a>
+            <a class="btn btn-outline-dark" href="/extract" role="button">Extract Data</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+    <title>Search Similar Images</title>
+{% endblock %}
+
+
+{% block additional_script %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.css">
+    <style>
+        .gallery {
+        padding: 40px;
+        }
+
+        .gallery img {
+        width: 100%;
+        border-radius: 0;
+        position: relative;
+        }
+
+        .hidden_images{
+            display: none;
+        }
+    </style>
+    <script>
+        var subjectObject = {
+          "Alliance_Application": {},
+          "CRM":{}
+        }
+        window.onload = function() {
+          var subjectSel = document.getElementById("annotation");
+
+          for (var x in subjectObject) {
+            subjectSel.options[subjectSel.options.length] = new Option(x, x);
+          }
+        }
+    </script>
+
+{% endblock %}
+
+
+{% block heading %}
+    <div class="display-6 newnav" style="height:1.4em;">
+        <a style="margin-left:2%; text-align:center;">Extract Data from PDF</a>
+        <a href="/" style="float:right; margin-right:2%;"><button class="btn btn-outline-light">Home</button></a>
+    </div>
+{% endblock %}
+
+
+{% block data %}
+    <div style="margin-left:2%; margin-right:2%;">
+	    <br>
+        <p style="font-size:1.5em;">Select PDF to extract data</p>
+        <hr>
+        <form method="post" action="/extract" enctype="multipart/form-data" id="form_loading">
+            Select Annotation: <select name="annote" id="annotation">
+                                   <option value="" selected="selected">Select type of Annotation</option>
+                               </select>
+            <br><br>
+            <input type="file" name="input_pdfs" multiple="true" autocomplete="off" required>
+            <br><br>
+            <input type="submit" class="btn btn-dark" value="Upload" />
+        </form>
+        <pre id="myText"></pre>
+        {% if json_data %}
+            <input type = "button" onclick = "logTheObj({{ json_data }})" value = "Display">
+        {% endif %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
+    <script>
+    var data = {
+     foo: "sample",
+     bar: "sample"
+     };
+
+    document.getElementById("myText").innerHTML = JSON.stringify(data, null, 2);
+        function logTheObj(obj) {
+            var ret = "";
+            for (var o in obj) {
+                var data = obj[o];
+                if (typeof data !== 'object') {
+                    ret += "<li>" + o + " : " + data + "</li>";
+                } else {
+                    ret += "<li>" + o + " : " + logTheObj(data) + "</li>";
+                }
+            }
+            return "<ul>" + ret + "</ul>";
+        }
+    </script>
+
+{% endblock %}
