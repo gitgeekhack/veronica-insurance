@@ -14,6 +14,8 @@ APP_ROOT = os.path.dirname(os.path.abspath(__file__))  # root folder of applicat
 
 UPLOAD_FOLDER = APP_ROOT + '/static/Uploaded_files'  # upload folder for images
 
+STATIC_FOLDER = APP_ROOT + '/static'
+
 DATA_FOLDER = APP_ROOT + '/data'  # folder for storing extracted data
 
 MOBILENET_V2_URL = 'https://tfhub.dev/google/imagenet/mobilenet_v2_140_224/feature_vector/4'

@@ -24,14 +24,10 @@
         }
     </style>
     <script>
-        var subjectObject = {
-          "Alliance_Application": {},
-          "CRM":{}
-        }
         window.onload = function() {
           var subjectSel = document.getElementById("annotation");
 
-          for (var x in subjectObject) {
+          for (var x in {{annotated|tojson}}) {
             subjectSel.options[subjectSel.options.length] = new Option(x, x);
           }
         }
@@ -55,7 +51,7 @@
         <hr>
         <form method="post" action="/extract" enctype="multipart/form-data" id="form_loading">
             Select Annotation: <select name="annote" id="annotation">
-                                   <option value="" selected="selected">Select type of Annotation</option>
+                                   <option value="" selected="selected">Select Annotated Document</option>
                                </select>
             <br><br>
             <input type="file" name="input_pdfs" multiple="true" autocomplete="off" required>
@@ -64,30 +60,12 @@
         </form>
         <pre id="myText"></pre>
         {% if json_data %}
-            <input type = "button" onclick = "logTheObj({{ json_data }})" value = "Display">
+            {{ json_data }}
         {% endif %}
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/baguettebox.js/1.11.1/baguetteBox.min.js"></script>
     <script>
-    var data = {
-     foo: "sample",
-     bar: "sample"
-     };
-
-    document.getElementById("myText").innerHTML = JSON.stringify(data, null, 2);
-        function logTheObj(obj) {
-            var ret = "";
-            for (var o in obj) {
-                var data = obj[o];
-                if (typeof data !== 'object') {
-                    ret += "<li>" + o + " : " + data + "</li>";
-                } else {
-                    ret += "<li>" + o + " : " + logTheObj(data) + "</li>";
-                }
-            }
-            return "<ul>" + ret + "</ul>";
-        }
     </script>
 
 {% endblock %}

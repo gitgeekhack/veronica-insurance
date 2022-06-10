@@ -14,6 +14,9 @@ def find_rectangle_boxes(annotation_file, sample_file):
     pdf_width = float(doc[0].bound().x1)
     pdf_height = float(doc[0].bound().y1)
 
+    if isinstance(my_dict['annotations']['image'], dict):
+        my_dict['annotations']['image'] = [my_dict['annotations']['image']]
+
     image_width = float(my_dict['annotations']['image'][0]['@width'])
     image_height = float(my_dict['annotations']['image'][0]['@height'])
 
@@ -21,6 +24,7 @@ def find_rectangle_boxes(annotation_file, sample_file):
     height_ratio = pdf_height / image_height
 
     bounding_box_data = {}
+
     for page_image in my_dict['annotations']['image']:
         try:
             page_no = int(page_image['@id'])

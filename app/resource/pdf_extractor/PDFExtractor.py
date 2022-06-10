@@ -1,18 +1,14 @@
+import os
 import aiohttp_jinja2
-import cv2
-import numpy as np
 from aiohttp import web
 import json
-from app.constant import UPLOAD_FOLDER, MAXIMUM_UPLOAD, DATA_FOLDER
+from app.constant import UPLOAD_FOLDER, DATA_FOLDER, STATIC_FOLDER
 from app.common.utils import allowed_file, save_file
 from app.service.pdf_extractor.PDFExtractor import DataPointExtraction
-import glob
-import pprint
+from app.service.helper.annotation_file_extractor import extract_annotation_files
 import pandas as pd
-pd.set_option('display.max_rows', None)
-pd.set_option('display.max_columns', None)
-pd.set_option('display.width', None)
-pd.set_option('display.max_colwidth', None)
+
+annotation_data = None
 
 
 class HomePage(web.View):
@@ -24,7 +20,15 @@ class HomePage(web.View):
 class DataExtraction(web.View):
     @aiohttp_jinja2.template('data_extraction.html')
     async def get(self):
-        return {}
+        global annotation_data
+
+        extract_annotation_files()
+
+        annotation_data = {}
+        for file in os.listdir(os.path.join(STATIC_FOLDER, 'annotations')):
+            filename = file.split('.')[0]
+            annotation_data[filename] = {}
+        return {'annotated': annotation_data}
 
     @aiohttp_jinja2.template('data_extraction.html')
     async def post(self):
@@ -40,21 +44,11 @@ class DataExtraction(web.View):
                 save_file(file, filetype='pdf')
                 allowed_files_path.append(UPLOAD_FOLDER + '/pdfs/' + file.filename)
 
-        data_extracted = extractor.extract(UPLOAD_FOLDER + '/annotations/' + annotation_file + '.xml',
+        data_extracted = extractor.extract(STATIC_FOLDER + '/annotations/' + annotation_file + '.xml',
                                            allowed_files_path)
 
         df = pd.DataFrame(data_extracted)
         df = df.T
         df.to_csv(DATA_FOLDER + '/' + annotation_file + '.csv')
 
-        return {"json_data": json.dumps(data_extracted)}
-
-
-class PDFAnnotation(web.View):
-    @aiohttp_jinja2.template('pdf_annotation.html')
-    async def get(self):
-        return {}
-
-    @aiohttp_jinja2.template('pdf_annotation.html')
-    async def post(self):
-        return {}
+        return {"json_data": json.dumps(data_extracted), 'annotated': annotation_data}

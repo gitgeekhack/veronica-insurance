@@ -1,7 +1,9 @@
 import subprocess
 import fitz
 import ocrmypdf
+import os
 from app.service.helper.xml_parser import find_rectangle_boxes
+from app.constant import STATIC_FOLDER
 
 
 class DataPointExtraction:
@@ -19,8 +21,8 @@ class DataPointExtraction:
     @staticmethod
     def covert_vectored_to_electronic(filepath):
         try:
-            # subprocess.Popen(['ocrmypdf', filepath, 'converted.pdf'])
-            ocrmypdf.ocr(filepath, "/home/nirav/PycharmProjects/PDF-Annotation/app/static/converted.pdf")
+            subprocess.run(['ocrmypdf', filepath,
+                            os.path.join(STATIC_FOLDER, f'Converted_files/{filepath.split("/")[-1]}')])
         except:
             pass
 
@@ -42,18 +44,13 @@ class DataPointExtraction:
         for file in files:
             doc = fitz.open(file)
 
-            text = ''
-            is_electronic = False
-            for page in doc:
-                text += page.get_text()
-                if len(set([i for i in text if i.isalpha()])) > 1:
-                    is_electronic = True
-                    break
-            if is_electronic:
-                self.data[file.split('/')[-1]] = self.extract_data(doc, rect_boxes)
-            else:
+            self.data[file.split('/')[-1]] = self.extract_data(doc, rect_boxes)
+
+            values = list(self.data.values())[0]
+            if len(set(values.values())) == 1:
                 self.covert_vectored_to_electronic(file)
-                converted_doc = fitz.open("/home/nirav/PycharmProjects/PDF-Annotation/app/static/converted.pdf")
+                converted_doc = fitz.open(os.path.join(STATIC_FOLDER,
+                                          f'Converted_files/{file.split("/")[-1]}'))
                 self.data[file.split('/')[-1]] = self.extract_data(converted_doc, rect_boxes)
 
         return self.data
